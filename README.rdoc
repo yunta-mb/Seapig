@@ -1,0 +1,36 @@
+= Seapig
+
+Nothing here yet.
+
+To cover:
+
+* what are seapigs and why they exist? (why not just having a db table?)
+  * link to https://www.youtube.com/watch?v=_y4DbZivHCY
+* properties of seapig system
+  * data is cached in memory
+  * only diffs are sent
+  * data is generated in separate processes
+  * data gets regenerated on dependency change (immediately on db change)
+* describe current limits
+  * one level deps only
+  * single object can have at most one generation process running at all times
+  * cache is dropped when last client unlinks
+  * no client-side timeout detection
+  * postgres only (but is that really a problem? ;))
+* graph of server/client side seapig object states
+* disclaimer on non-efficient code. it's all a draft, a test of idea.
+* rails not needed
+* stuff will change
+* seapig = firebase for apps that need real db
+* works nicely with mithril
+* how to use this shit
+  * dummy app is a minimal demo
+  * bundle exec rails s
+  * bundle exec ruby ../../bin/seapig-server.rb
+  * bundle exec ruby ../../bin/seapig-worker.rb ws://127.0.0.1:3001/seapig
+  * bundle exec ruby ../../bin/seapig-notifier.rb ws://127.0.0.1:3001/seapig
+  * application.js needs: require seapig/seapig
+  * application.js needs: require json-patch
+  * ActiveRecord models that are used for triggering regeneration of data need:
+    * acts_as_seapig_dependency
+    * and seapig_dependency_changed after commits

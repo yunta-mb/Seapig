@@ -1,0 +1,55 @@
+require 'websocket-eventmachine-client'
+require 'json'
+
+
+class Generator
+
+	@@generators = []
+
+	
+	def self.inherited(klass)
+		@@generators << klass
+	end
+
+	
+	def self.for(object_id)
+		@@generators.find { |generator| generator.handles?(object_id) }
+	end
+	
+end
+
+Dir['lib/seapigs/*.rb'].each { |f| require './'+f }
+
+
+
+EM.run {
+
+	socket = WebSocket::EventMachine::Client.connect(uri: ARGV[0])
+
+	
+	socket.onopen {
+		socket.send JSON.dump(action: 'worker-register')
+	}
+
+	
+	socket.onmessage { |message|
+		#p message
+		message = JSON.load message
+		case message['action']
+		when 'estimate'
+			socket.send JSON.dump(action: 'worker-estimate', id: message['id'], estimate: 0) if Generator.for(message['id'])
+		when 'generate'
+			start = Time.new
+			object, version = Generator.for(object_id = message['id']).generate(object_id)
+			puts 'Generated %25s in %5.2fs'%[object_id, (Time.new-start).to_f]
+			socket.send JSON.dump(action: 'update', id: object_id, object: object, version: version)
+		end
+	}
+
+	
+	socket.onclose { |code, reason|
+		EM.stop
+	}
+
+}
+

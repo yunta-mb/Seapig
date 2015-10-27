@@ -1,0 +1,10 @@
+| Seapig object:
+br
+code#object-drop
+  | not loaded yet
+javascript:
+  var server = new SeaPigServer('ws://localhost:3001/seapig');
+  var object = server.link('random-list');
+  object.onchange = function() {
+    document.getElementById('object-drop').innerHTML = JSON.stringify(object.object);
+  };
