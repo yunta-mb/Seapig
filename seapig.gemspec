@@ -16,6 +16,7 @@ Gem::Specification.new do |s|
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc", "bin/seapig-*"]
   s.test_files = Dir["test/**/*"]
+  s.executables = ["seapig-worker","seapig-server","seapig-notifier"]
 
   s.add_dependency "rails", "~> 4.2.4"
   s.add_dependency "websocket-eventmachine-server"

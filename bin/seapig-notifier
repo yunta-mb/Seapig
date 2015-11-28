@@ -1,3 +1,5 @@
+#!/bin/env ruby
+
 require './config/environment.rb'
 
 require 'websocket-eventmachine-client'

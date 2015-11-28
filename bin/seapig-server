@@ -1,3 +1,5 @@
+#!/bin/env ruby
+
 require 'websocket-eventmachine-server'
 require 'json'
 require 'set'
