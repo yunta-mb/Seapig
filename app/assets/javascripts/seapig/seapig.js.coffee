@@ -39,7 +39,7 @@ class @SeaPigServer
 
 
         link: (object_id) ->
-                @socket.send(JSON.stringify(action: 'link', id: object_id, latest_known_version: object.version)) if @connected
+                @socket.send(JSON.stringify(action: 'link', id: object_id, latest_known_version: null)) if @connected
                 @objects[object_id] = new SeaPigObject(object_id)
 
 
